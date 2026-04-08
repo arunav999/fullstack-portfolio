@@ -1,0 +1,40 @@
+import { NextResponse } from "next/server";
+
+import { connectDB } from "@/lib/db";
+import Project from "@/lib/models/Project";
+
+export async function POST(req: Request) {
+  try {
+    await connectDB();
+    const body = await req.json();
+
+    const { title, description, status, isVisible } = body;
+
+    // 1. Validate Strings (Using optional chaining ?. to prevent crashes)
+    if (!title?.trim() || !description?.trim()) {
+      return NextResponse.json(
+        { message: "Title and description are required fields." },
+        { status: 400 } // Bad Request
+      );
+    }
+
+    // 2. Validate Enums & Booleans
+    if (!status || isVisible === undefined) {
+      return NextResponse.json(
+        { message: "Status and Visibility are required fields." },
+        { status: 400 } // Bad Request
+      );
+    }
+
+    // 3. Database Operation
+    const newProject = await Project.create(body);
+
+    return NextResponse.json(newProject, { status: 201 }); // Created
+    
+  } catch (error: any) {
+    return NextResponse.json(
+      { message: "Failed to create project", error: error.message },
+      { status: 500 } // Server Error
+    );
+  }
+}
