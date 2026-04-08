@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import Project from "@/lib/models/Project";
 
+/* ==================== POST ROUTE ==================== */
 export async function POST(req: Request) {
   try {
     await connectDB();
@@ -14,7 +15,7 @@ export async function POST(req: Request) {
     if (!title?.trim() || !description?.trim()) {
       return NextResponse.json(
         { message: "Title and description are required fields." },
-        { status: 400 } // Bad Request
+        { status: 400 }, // Bad Request
       );
     }
 
@@ -22,7 +23,7 @@ export async function POST(req: Request) {
     if (!status || isVisible === undefined) {
       return NextResponse.json(
         { message: "Status and Visibility are required fields." },
-        { status: 400 } // Bad Request
+        { status: 400 }, // Bad Request
       );
     }
 
@@ -30,11 +31,26 @@ export async function POST(req: Request) {
     const newProject = await Project.create(body);
 
     return NextResponse.json(newProject, { status: 201 }); // Created
-    
   } catch (error: any) {
     return NextResponse.json(
       { message: "Failed to create project", error: error.message },
-      { status: 500 } // Server Error
+      { status: 500 }, // Server Error
+    );
+  }
+}
+
+/* ==================== GET ROUTE ==================== */
+export async function GET(req: Request) {
+  try {
+    await connectDB();
+
+    const projects = await Project.find({}).sort({ createdAt: -1 });
+
+    return NextResponse.json(projects, { status: 200 });
+  } catch (error: any) {
+    return NextResponse.json(
+      { message: "Failed to fetch the projects" },
+      { status: 500 },
     );
   }
 }
