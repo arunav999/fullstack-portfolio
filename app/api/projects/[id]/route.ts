@@ -29,11 +29,17 @@ export async function GET(
     }
 
     return NextResponse.json(getProject, { status: 200 });
-  } catch (error: any) {
-    return NextResponse.json(
-      { message: "Failed to get project", error: error?.message },
-      { status: 500 },
-    );
+  } catch (error) {
+    if (error instanceof Error) {
+      return NextResponse.json(
+        { message: "Failed to get project", error: error?.message },
+        { status: 500 },
+      );
+    } else {
+      return NextResponse.json({
+        message: "An unknown error occured",
+      });
+    }
   }
 }
 
@@ -74,11 +80,15 @@ export async function PATCH(
     );
 
     return NextResponse.json(updatedProject, { status: 200 });
-  } catch (error: any) {
-    return NextResponse.json(
-      { message: "Faailed to update the project", error: error?.message },
-      { status: 500 },
-    );
+  } catch (error) {
+    if (error instanceof Error) {
+      return NextResponse.json(
+        { message: "Failed to update the project", error: error?.message },
+        { status: 500 },
+      );
+    } else {
+      return NextResponse.json({ message: "An unknown error occured" });
+    }
   }
 }
 
@@ -111,10 +121,14 @@ export async function DELETE(
       { message: "Project deleted successfully." },
       { status: 200 },
     );
-  } catch (error: any) {
-    return NextResponse.json(
-      { message: "Failed to delete project", error: error?.message },
-      { status: 500 },
-    );
+  } catch (error) {
+    if (error instanceof Error) {
+      return NextResponse.json(
+        { message: "Failed to delete project", error: error?.message },
+        { status: 500 },
+      );
+    } else {
+      return NextResponse.json({ message: "An unknown error occured" });
+    }
   }
 }

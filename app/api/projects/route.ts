@@ -44,7 +44,7 @@ export async function POST(req: Request) {
 }
 
 /* ==================== GET ROUTE ==================== */
-export async function GET(req: Request) {
+export async function GET() {
   try {
     await connectDB();
 
