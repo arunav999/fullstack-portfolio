@@ -31,11 +31,15 @@ export async function POST(req: Request) {
     const newProject = await Project.create(body);
 
     return NextResponse.json(newProject, { status: 201 }); // Created
-  } catch (error: any) {
-    return NextResponse.json(
-      { message: "Failed to create project", error: error.message },
-      { status: 500 }, // Server Error
-    );
+  } catch (error) {
+    if (error instanceof Error) {
+      return NextResponse.json(
+        { message: "Failed to create project", error: error?.message },
+        { status: 500 }, // Server Error
+      );
+    } else {
+      return NextResponse.json({ message: "An unknown error occured" });
+    }
   }
 }
 
@@ -47,10 +51,14 @@ export async function GET(req: Request) {
     const projects = await Project.find({}).sort({ createdAt: -1 });
 
     return NextResponse.json(projects, { status: 200 });
-  } catch (error: any) {
-    return NextResponse.json(
-      { message: "Failed to fetch the projects" },
-      { status: 500 },
-    );
+  } catch (error) {
+    if (error instanceof Error) {
+      return NextResponse.json(
+        { message: "Failed to fetch the projects", error: error?.message },
+        { status: 500 },
+      );
+    } else {
+      return NextResponse.json({ message: "An unknown error occured" });
+    }
   }
 }
