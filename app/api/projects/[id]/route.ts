@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 
 import { connectDB } from "@/lib/db";
+import { handleApiError } from "@/lib/utils/errorHandler";
+
 import Project from "@/lib/models/Project";
 
 /* ==================== GET ROUTE ==================== */
@@ -30,16 +32,7 @@ export async function GET(
 
     return NextResponse.json(getProject, { status: 200 });
   } catch (error) {
-    if (error instanceof Error) {
-      return NextResponse.json(
-        { message: "Failed to get project", error: error?.message },
-        { status: 500 },
-      );
-    } else {
-      return NextResponse.json({
-        message: "An unknown error occured",
-      });
-    }
+    handleApiError(error, "Failed to get project");
   }
 }
 
@@ -81,14 +74,7 @@ export async function PATCH(
 
     return NextResponse.json(updatedProject, { status: 200 });
   } catch (error) {
-    if (error instanceof Error) {
-      return NextResponse.json(
-        { message: "Failed to update the project", error: error?.message },
-        { status: 500 },
-      );
-    } else {
-      return NextResponse.json({ message: "An unknown error occured" });
-    }
+    handleApiError(error, "Failed to update the project");
   }
 }
 
@@ -122,13 +108,6 @@ export async function DELETE(
       { status: 200 },
     );
   } catch (error) {
-    if (error instanceof Error) {
-      return NextResponse.json(
-        { message: "Failed to delete project", error: error?.message },
-        { status: 500 },
-      );
-    } else {
-      return NextResponse.json({ message: "An unknown error occured" });
-    }
+    handleApiError(error, "Failed to delete the project");
   }
 }

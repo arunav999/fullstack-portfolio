@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 
 import { connectDB } from "@/lib/db";
+import { handleApiError } from "@/lib/utils/errorHandler";
+
 import Project from "@/lib/models/Project";
 
 /* ==================== POST ROUTE ==================== */
@@ -32,14 +34,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json(newProject, { status: 201 }); // Created
   } catch (error) {
-    if (error instanceof Error) {
-      return NextResponse.json(
-        { message: "Failed to create project", error: error?.message },
-        { status: 500 }, // Server Error
-      );
-    } else {
-      return NextResponse.json({ message: "An unknown error occured" });
-    }
+    handleApiError(error, "Failed to create project");
   }
 }
 
@@ -52,13 +47,6 @@ export async function GET() {
 
     return NextResponse.json(projects, { status: 200 });
   } catch (error) {
-    if (error instanceof Error) {
-      return NextResponse.json(
-        { message: "Failed to fetch the projects", error: error?.message },
-        { status: 500 },
-      );
-    } else {
-      return NextResponse.json({ message: "An unknown error occured" });
-    }
+    handleApiError(error, "Failed to fetch the project");
   }
 }
