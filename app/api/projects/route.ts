@@ -34,7 +34,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json(newProject, { status: 201 }); // Created
   } catch (error) {
-    handleApiError(error, "Failed to create project");
+    return handleApiError(error, "Failed to create project");
   }
 }
 
@@ -47,6 +47,6 @@ export async function GET() {
 
     return NextResponse.json(projects, { status: 200 });
   } catch (error) {
-    handleApiError(error, "Failed to fetch the project");
+    return handleApiError(error, "Failed to fetch the project");
   }
 }

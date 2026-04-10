@@ -32,7 +32,7 @@ export async function GET(
 
     return NextResponse.json(getProject, { status: 200 });
   } catch (error) {
-    handleApiError(error, "Failed to get project");
+    return handleApiError(error, "Failed to get project");
   }
 }
 
@@ -74,7 +74,7 @@ export async function PATCH(
 
     return NextResponse.json(updatedProject, { status: 200 });
   } catch (error) {
-    handleApiError(error, "Failed to update the project");
+    return handleApiError(error, "Failed to update the project");
   }
 }
 
@@ -108,6 +108,6 @@ export async function DELETE(
       { status: 200 },
     );
   } catch (error) {
-    handleApiError(error, "Failed to delete the project");
+    return handleApiError(error, "Failed to delete the project");
   }
 }
