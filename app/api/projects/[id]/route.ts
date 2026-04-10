@@ -46,31 +46,15 @@ export async function PATCH(
 
     const body = await req.json();
     const { id } = await params;
-    const { title, description, status, isVisible } = body;
 
     if (!id) {
       return NextResponse.json({ message: "id is required" }, { status: 400 });
     }
 
-    if (!title?.trim() || !description?.trim()) {
-      return NextResponse.json(
-        { message: "Title and description are required for updates" },
-        { status: 400 },
-      );
-    }
-
-    if (!status || isVisible === undefined) {
-      return NextResponse.json(
-        { message: "Status and visibility are required fields" },
-        { status: 400 },
-      );
-    }
-
-    const updatedProject = await Project.findByIdAndUpdate(
-      id,
-      { title, description, status, isVisible },
-      { new: true, runValidators: true },
-    );
+    const updatedProject = await Project.findByIdAndUpdate(id, body, {
+      new: true,
+      runValidators: true,
+    });
 
     return NextResponse.json(updatedProject, { status: 200 });
   } catch (error) {
