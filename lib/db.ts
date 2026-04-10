@@ -28,16 +28,33 @@ export async function connectDB() {
 
   const c = cached;
 
-  if (c.conn) return c.conn;
+  if (c.conn) {
+    console.log("=> Using existing CACHED connection");
+    return c.conn;
+  }
 
   if (!c.promise) {
     const opts = {
       bufferCommands: false,
     };
 
-    c.promise = mongoose.connect(MONGO_URI, opts).then((m) => m);
+    console.log("=> Creating NEW DB_Connection...");
+
+    c.promise = mongoose.connect(MONGO_URI, opts).then((m) => {
+      console.log("=> Successfully connected to MONGO_DB");
+      return m;
+    });
+  } else {
+    console.log("=> Wating for existing connection promise...");
   }
 
-  c.conn = await c.promise;
+  try {
+    c.conn = await c.promise;
+  } catch (e) {
+    c.promise = null;
+    console.error("=> Database connection ERROR!!!", e);
+    throw e;
+  }
+
   return c.conn;
 }
