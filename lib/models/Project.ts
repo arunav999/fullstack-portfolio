@@ -16,9 +16,9 @@ const ProjectSchema = new Schema(
   {
     title: { type: String, required: true },
     description: { type: String, required: true },
-    imageUrl: { type: String, required: false },
-    liveLink: { type: String, required: false },
-    githubLink: { type: String, required: false },
+    imageUrl: { type: String, required: false, default: null },
+    liveLink: { type: String, required: false, default: null },
+    githubLink: { type: String, required: false, default: null },
     status: {
       type: String,
       enum: ["draft", "active", "inactive"],
