@@ -52,7 +52,7 @@ export async function PATCH(
     }
 
     const updatedProject = await Project.findByIdAndUpdate(id, body, {
-      new: true,
+      returnDocument: "after",
       runValidators: true,
     });
 
