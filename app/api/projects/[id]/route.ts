@@ -56,6 +56,12 @@ export async function PATCH(
       runValidators: true,
     });
 
+    if (!updatedProject)
+      return NextResponse.json(
+        { message: `Project id: ${id} does not exist.` },
+        { status: 404 },
+      );
+
     return NextResponse.json(updatedProject, { status: 200 });
   } catch (error) {
     return handleApiError(error, "Failed to update the project");
