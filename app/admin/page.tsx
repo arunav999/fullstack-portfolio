@@ -15,6 +15,7 @@ export default function AdminPage() {
   });
 
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   // Handle input
   const handleInputChnage = (
@@ -22,18 +23,23 @@ export default function AdminPage() {
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >,
   ) => {
-    
+    e.preventDefault();
+
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   // Handle file
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setImageFile(e.target.files[0]);
+      const file = e.target.files[0];
+      setImageFile(file);
+
+      setImagePreview(URL.createObjectURL(file));
     }
   };
 
   //Handle submit
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
   };
 
@@ -42,13 +48,13 @@ export default function AdminPage() {
       <div className="">
         <h1 className="">Project</h1>
 
-        <form action="" className="">
+        <form action="" className="" onSubmit={(e) => handleSubmit(e)}>
           {/* Title */}
           <input
             type="text"
             name="title"
             value={formData.title}
-            onChange={handleInputChnage}
+            onChange={(e) => handleInputChnage(e)}
             placeholder="Project Title"
             className=""
           />
@@ -58,7 +64,7 @@ export default function AdminPage() {
             name="description"
             id=""
             value={formData.description}
-            onChange={handleInputChnage}
+            onChange={(e) => handleInputChnage(e)}
             placeholder="Project Description"
             className=""
           ></textarea>
@@ -71,10 +77,10 @@ export default function AdminPage() {
               id=""
               className=""
               accept="image/*"
-              onChange={handleFileChange}
+              onChange={(e) => handleFileChange(e)}
             />
 
-            <Image src={imageFile} alt={formData.title} />
+            {imagePreview && <Image src={imagePreview} alt={formData.title} />}
 
             <button className="">Upload to cloud</button>
             <button className="">Delete upload</button>
@@ -83,7 +89,7 @@ export default function AdminPage() {
           </div>
 
           {/* Submit Button */}
-          <button type="submit" onSubmit={handleSubmit} className="">
+          <button type="submit" className="">
             Add Project
           </button>
         </form>
